@@ -6,10 +6,13 @@ uint64_t gcd64(uint64_t u, uint64_t v)
 {
     if (!u || !v)
         return u | v;
-    int shift;
-    for (shift = 0; !((u | v) & 1); shift++) {
-        u /= 2, v /= 2;
-    }
+
+    int uz = __builtin_ctz(u);
+    int vz = __builtin_ctz(v);
+
+    int shift = uz > vz ? vz : uz;
+    u >>= shift;
+    v >>= shift;
     while (!(u & 1))
         u /= 2;
     do {
@@ -33,5 +36,7 @@ void ex(int a, int b)
 int main(int argc, char const *argv[])
 {
     ex(15, 5);
+    ex(15, 7);
+    ex(3, 21);
     return 0;
 }
